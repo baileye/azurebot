@@ -54,7 +54,7 @@ bot.add('/', [function (session) {
                                 session.send('You\'ve ' + session.userData.vmCount + ' Virtual Machines running at the moment.');
                                 var vms = '';
                                 for (var vm in vmList) {
-                                    vms += vmList[vm].name + ' in ' + vmList[vm].location + '(' + vmList[vm].size + ')\n';
+                                    vms += '- ' + vmList[vm].name + ' in ' + vmList[vm].location + ' (' + vmList[vm].size + ')\n';
                                 }
                                 session.send(vms);
                                 builder.Prompts.confirm(session, 'Would you like me to shut down your largest VM?');
