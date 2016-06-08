@@ -34,6 +34,7 @@ bot.add('/', [function (session) {
             // Get the intent
             switch (luisBody.intents[0].intent) {
                 case 'Cost':
+                    session.send('Looking up your Azure resources and prices now...');
                     billing.totalCost(function(err, results) {
                         session.userData.totalCost = results;
                         session.send('You\'re spending $' + session.userData.totalCost + ' every hour.');
