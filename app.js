@@ -44,7 +44,7 @@ bot.add('/', [function (session) {
                     break;
                 case 'Count':
                     session.send('I\'m querying your subscription now, give me a second');
-                     arm.login(function() {
+                    arm.login(function() {
                         arm.getVMList(function(err, vmList) {  
                             if (err)
                                 console.log(err);
@@ -71,9 +71,9 @@ bot.add('/', [function (session) {
     }) // luis call
 }, function (session, results) {
         if (results.response) {
-            session.send('Total cost was $' + session.userData.totalCost + ' every hour.');
+            // session.send('Total cost was $' + session.userData.totalCost + ' every hour.');
             // arm.shutDownVM(id);
-            session.send('Shutting down the VM.');
+            // session.send('Shutting down the VM.');
             session.send("Great, Anko will be happy with that!"); 
         } else {
             session.send("OK, Anko will not be happy...");
