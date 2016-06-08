@@ -72,8 +72,8 @@ bot.add('/', [function (session) {
         if (results.response) {
             session.send('Total cost was $' + session.userData.totalCost + ' every hour.');
             // arm.shutDownVM(id);
-            session.send("Great, Anko will be happy with that!");
-            session.send('Shutting down the VM.'); 
+            session.send('Shutting down the VM.');
+            session.send("Great, Anko will be happy with that!"); 
         } else {
             session.send("OK, Anko will not be happy...");
         }
