@@ -43,6 +43,7 @@ bot.add('/', [function (session) {
                     });
                     break;
                 case 'Count':
+                    session.send('I\'m querying your subscription now, give me a second');
                      arm.login(function() {
                         arm.getVMList(function(err, vmList) {  
                             if (err)
