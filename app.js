@@ -14,28 +14,48 @@ about a specific user.
 
 var restify = require('restify');
 var builder = require('botbuilder');
-
+var luis = require('./luis');
 
 var bot = new builder.BotConnectorBot({ appId: process.env.appid, appSecret: process.env.appsecret });
-bot.add('/', [
-    function (session) {
-        builder.Prompts.text(session, "Hello... What's your name?");
-    },
-    function (session, results) {
-        session.userData.name = results.response;
-        builder.Prompts.number(session, "Hi " + results.response + ", How many years have you been coding?"); 
-    },
-    function (session, results) {
-        session.userData.coding = results.response;
-        builder.Prompts.choice(session, "What language do you code Node using?", ["JavaScript", "CoffeeScript", "TypeScript"]);
-    },
-    function (session, results) {
-        session.userData.language = results.response.entity;
-        session.send("Got it... " + session.userData.name + 
-                     " you've been programming for " + session.userData.coding + 
-                     " years and use " + session.userData.language + ".");
-    }
-]);
+bot.add('/', [function (session) {
+
+    var chatStringVariable = session.message.text;
+    
+    // Determine intent of the user prior to assessing sentiment
+    luis(process.env.luidId, process.env.luisKey, chatStringVariable, function(err, luisBody) {
+        console.log(luisBody);
+        if (err) {
+            // Handle error   
+            console.log(err);          
+        }
+        else{
+        
+            // Determine request
+            // textAnalytics(chatStringVariable, function(err, textanalyticsBody) {
+        
+            // if (err) {
+            //     // Handle error  
+            //     console.log(err); 
+            // }
+            // else{
+        
+                // var sentimentpercent = ((textanalyticsBody.documents[0].score / 1) * 100).toFixed(2); 
+                // var luisPercentageScore = ((luisBody.intents[0].score / 1) * 100).toFixed(2); 
+                // var myString = luisBody.intents[0].intent + " (Lscore: " + luisPercentageScore + " Sscore: " + sentimentpercent + ")";            
+                    
+                session.send('Magic has happened...'); // display the response to the user
+            // }
+            // }) // text analytics call
+        }
+    }) // luis call
+}, function (session, results) {
+        if (results.response) {
+            var responseval = results.response.entity;
+            session.send("Great! Let's go get a Canoli from Mike's!"); 
+        } else {
+            session.send("So sorry - please cheer up!");
+        }
+    }]);
 
 // Setup Restify Server
 var server = restify.createServer();
