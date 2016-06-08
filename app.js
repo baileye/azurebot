@@ -54,10 +54,12 @@ bot.add('/', [function (session) {
     }) // luis call
 }, function (session, results) {
         if (results.response) {
+            session.send('Total cost was $' + session.userData.totalCost + ' every hour.');
             // arm.shutDownVM(id);
-            session.send("Great! Let's go get a Canoli from Mike's!"); 
+            session.send("Great, Anko will be happy with that!");
+            session.send('Shutting down the VM.'); 
         } else {
-            session.send("So sorry - please cheer up!");
+            session.send("OK, Anko will not be happy...");
         }
     }]);
 
