@@ -8,7 +8,9 @@
   },
   "author": "Paul Bower, Thomas Conte, Benjamin Moules, Eoin Bailey",
   "dependencies": {
+    "azure-arm-compute": "^0.18.0",
     "botbuilder": "^0.11.1",
+    "ms-rest-azure": "^1.14.2",
     "restify": "^4.1.0"
   }
 }
