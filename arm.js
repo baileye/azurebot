@@ -2,10 +2,10 @@ var msRestAzure = require('ms-rest-azure');
 var computeManagementClient = require('azure-arm-compute');
 
 // Authentication stuff
-var clientId = "xxxx";
-var tenandId = "xxxx";
-var secret = "xxxx";
-var subId = "xxxx";
+var clientId = process.env.clientId;
+var tenandId = process.env.tenantId;
+var secret = process.env.secret;
+var subId = process.env.subId;
 
 var _credentials;
 var _client;
