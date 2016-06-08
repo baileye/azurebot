@@ -20,6 +20,7 @@ var bot = new builder.BotConnectorBot({ appId: process.env.appid, appSecret: pro
 bot.add('/', [function (session) {
 
     var chatStringVariable = session.message.text;
+    session.send('You just said: ' + chatStringVariable);
     
     // Determine intent of the user prior to assessing sentiment
     luis(process.env.luidId, process.env.luisKey, chatStringVariable, function(err, luisBody) {
