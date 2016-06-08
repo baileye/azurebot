@@ -16,6 +16,7 @@ var restify = require('restify');
 var builder = require('botbuilder');
 var luis = require('./luis');
 var billing = require('./billing');
+var arm = require('./arm');
 
 var bot = new builder.BotConnectorBot({ appId: process.env.appid, appSecret: process.env.appsecret });
 bot.add('/', [function (session) {
@@ -42,9 +43,23 @@ bot.add('/', [function (session) {
                     });
                     break;
                 case 'Count':
-                    session.userData.vmCount = 10; //billing.vmCount();
-                    session.send('You\'ve ' + session.userData.vmCount + ' Virtual Machines running at the moment.');
-                    builder.Prompts.confirm(session, 'Would you like me to shut down your largest VM?');
+                     arm.login(function() {
+                        arm.getVMList(function(err, vmList) {  
+                            if (err)
+                                console.log(err);
+                            else {
+                                // name: o.name, location: o.location, size: o.hardwareProfile.vmSize
+                                session.send('You\'ve ' + session.userData.vmCount + ' Virtual Machines running at the moment.');
+                                var vms = '';
+                                for (var vm in vmList) {
+                                    vms += vmList[vm].name + ' in ' + vmList[vm].location + '(' + vmList[vm].size + ')\n';
+                                }
+                                session.send(vms);
+                                session.userData.vmCount = vmList.length;
+                                builder.Prompts.confirm(session, 'Would you like me to shut down your largest VM?');
+                            }
+                        })
+                    })
                     break;
                 default:
                     session.send('I\'m afraid I can\'t to that Dave');
