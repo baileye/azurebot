@@ -15,6 +15,7 @@ about a specific user.
 var restify = require('restify');
 var builder = require('botbuilder');
 var luis = require('./luis');
+var billing = require('./billing');
 
 var bot = new builder.BotConnectorBot({ appId: process.env.appid, appSecret: process.env.appsecret });
 bot.add('/', [function (session) {
@@ -30,28 +31,30 @@ bot.add('/', [function (session) {
             console.log(err);          
         }
         else{
-        
-            // Determine request
-            // textAnalytics(chatStringVariable, function(err, textanalyticsBody) {
-        
-            // if (err) {
-            //     // Handle error  
-            //     console.log(err); 
-            // }
-            // else{
-        
-                // var sentimentpercent = ((textanalyticsBody.documents[0].score / 1) * 100).toFixed(2); 
-                // var luisPercentageScore = ((luisBody.intents[0].score / 1) * 100).toFixed(2); 
-                // var myString = luisBody.intents[0].intent + " (Lscore: " + luisPercentageScore + " Sscore: " + sentimentpercent + ")";            
-                    
-                session.send('I think you want me to find out ' + luisBody.intents[0].intent); // display the response to the user
-            // }
-            // }) // text analytics call
+            // Get the intent
+            switch (luisBody.intents[0].intent) {
+                case 'Cost':
+                    billing.totalCost(function(err, results) {
+                        session.userData.totalCost = results;
+                        session.send('You\'re spending $' + session.userData.totalCost + ' every hour.');
+                        builder.Prompts.confirm(session, 'Would you like me to shut down your largest VM?');
+                    });
+                    break;
+                case 'Count':
+                    session.userData.vmCount = 10; //billing.vmCount();
+                    session.send('You\'ve ' + session.userData.vmCount + ' Virtual Machines running at the moment.');
+                    builder.Prompts.confirm(session, 'Would you like me to shut down your largest VM?');
+                    break;
+                default:
+                    session.send('I\'m afraid I can\'t to that Dave');
+
+            }
+                // session.send('I think you want me to find out ' + luisBody.intents[0].intent); // display the response to the user
         }
     }) // luis call
 }, function (session, results) {
         if (results.response) {
-            var responseval = results.response.entity;
+            // arm.shutDownVM(id);
             session.send("Great! Let's go get a Canoli from Mike's!"); 
         } else {
             session.send("So sorry - please cheer up!");
