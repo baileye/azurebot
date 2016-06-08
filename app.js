@@ -37,9 +37,13 @@ bot.add('/', [function (session) {
                 case 'Cost':
                     session.send('Looking up your Azure resources and prices now...');
                     billing.totalCost(function(err, results) {
-                        session.userData.totalCost = results;
-                        session.send('You\'re spending $' + session.userData.totalCost + ' every hour.');
-                        builder.Prompts.confirm(session, 'Would you like me to shut down your largest VM?');
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            session.userData.totalCost = results;
+                            session.send('You\'re spending $' + session.userData.totalCost + ' every hour.');
+                            builder.Prompts.confirm(session, 'Would you like me to shut down a VM?');
+                        }
                     });
                     break;
                 case 'Count':

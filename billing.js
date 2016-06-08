@@ -45,9 +45,10 @@ exports.totalCost = function(callback) {
 
   arm.login(function() {
     arm.getVMList(function(err, vmList) {  
-      if (err)
+      if (err) {
+        callback(err, null);
         console.log(err);
-      else {
+      } else {
         // name: o.name, location: o.location, size: o.hardwareProfile.vmSize
         for (var vm in vmList) {
           $totalAmount += costs[vmList[vm].size].MeterRate
