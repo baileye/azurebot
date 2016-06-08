@@ -23,8 +23,9 @@ exports.getVMList = function(callback) {
   _client.virtualMachines.listAll(function(err, result, request, response) {
     if (err) callback(err);
     var vmList = result.map(function(o) {
-      callback(null, { name: o.name, location: o.location, size: o.hardwareProfile.vmSize });
+      return({ name: o.name, location: o.location, size: o.hardwareProfile.vmSize });
     });
+    callback(null, vmList);
   });
 }
 
