@@ -43,7 +43,7 @@ bot.add('/', [function (session) {
                 // var luisPercentageScore = ((luisBody.intents[0].score / 1) * 100).toFixed(2); 
                 // var myString = luisBody.intents[0].intent + " (Lscore: " + luisPercentageScore + " Sscore: " + sentimentpercent + ")";            
                     
-                session.send('Magic has happened...'); // display the response to the user
+                session.send('I think you want me to find out ' + luisBody.intents[0].intent); // display the response to the user
             // }
             // }) // text analytics call
         }
